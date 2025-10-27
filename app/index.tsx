@@ -2,6 +2,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "reac
 import { useState } from "react";
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SignInScreen() {
   const router = useRouter();
@@ -11,14 +12,27 @@ export default function SignInScreen() {
   const [password, setPassword] = useState("");
 
   const handleSignIn = async () => {
-    const user = await db.getFirstAsync(
-      "SELECT * FROM users WHERE email = ? AND password = ?",
-      [email, password]
-    );
+    try {
+      // Kiểm tra người dùng có tồn tại không
+      const rows = await db.getAllAsync(
+        "SELECT * FROM users WHERE email = ? AND password = ?",
+        [email, password]
+      );
 
-    if (!user) return Alert.alert("Sai thông tin", "Email hoặc mật khẩu không đúng");
+      if (rows.length > 0) {
+        // 🟢 Lưu email của người dùng hiện tại vào AsyncStorage
+        await AsyncStorage.setItem("currentUser", email);
 
-    router.push("./(tabs)/home");
+        // 🟢 Chuyển sang màn Home (tabs layout)
+        await AsyncStorage.setItem("currentUserEmail", email);
+        router.replace("/(tabs)/home");
+
+      } else {
+        Alert.alert("Đăng nhập thất bại", "Email hoặc mật khẩu không đúng!");
+      }
+    } catch (e) {
+      console.error("Lỗi khi đăng nhập:", e);
+    }
   };
 
   return (

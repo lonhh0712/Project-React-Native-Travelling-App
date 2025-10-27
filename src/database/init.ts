@@ -9,24 +9,32 @@ export default async function initDatabase(db: any) {
     );
   `);
 
-  await db.execAsync(`
-    CREATE TABLE IF NOT EXISTS destinations (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      location TEXT NOT NULL,
-      price INTEGER NOT NULL,
-      image TEXT NOT NULL
-    );
-  `);
+await db.execAsync(`
+  CREATE TABLE IF NOT EXISTS destinations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    price INTEGER NOT NULL,
+    image TEXT NOT NULL
+  );
+`);
+
 
   // ✅ XÓA toàn bộ dữ liệu cũ mỗi lần app khởi chạy
   await db.execAsync(`DELETE FROM destinations`);
 
   // ✅ Thêm dữ liệu mẫu lại (tuỳ chọn)
   await db.runAsync(`
-    INSERT INTO destinations (name, location, price, image) VALUES
-    ('Đà Lạt', 'Lâm Đồng', 2500000, 'https://www.pinterest.com/pin/15692298692678900/'),
-    ('Phú Quốc', 'Kiên Giang', 4500000, 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e'),
-    ('Sapa', 'Lào Cai', 3200000, 'https://images.unsplash.com/photo-1568600891621-2a0b5a2b77d1')
+    INSERT INTO destinations (name,  price, image) VALUES
+    ('Đà Lạt', 2500000, 'https://github.com/lonhh0712/Project-React-Native-Travelling-App/raw/main/assets/images/dalat.jpg'),
+    ('Phú Quốc', 4500000, 'https://github.com/lonhh0712/Project-React-Native-Travelling-App/raw/main/assets/images/phuquoc.jpg'),
+    ('Sapa', 3200000, 'https://github.com/lonhh0712/Project-React-Native-Travelling-App/raw/main/assets/images/sapa.jpg'),
+    ('Đắk Lắk', 2200000, 'https://github.com/lonhh0712/Project-React-Native-Travelling-App/raw/main/assets/images/daklak.jpg'),
+    ('Đà Nẵng', 3500000, 'https://github.com/lonhh0712/Project-React-Native-Travelling-App/raw/main/assets/images/danang.jpg'),
+    ('Hà Giang', 3000000, 'https://github.com/lonhh0712/Project-React-Native-Travelling-App/raw/main/assets/images/hagiang.jpg'),
+    ('Hà Nội', 5200000, 'https://github.com/lonhh0712/Project-React-Native-Travelling-App/raw/main/assets/images/hanoi.jpg'),
+    ('Thành phố Hồ Chí Minh', 5000000, 'https://github.com/lonhh0712/Project-React-Native-Travelling-App/raw/main/assets/images/hcm.jpg'),
+    ('Huế', 2500000, 'https://github.com/lonhh0712/Project-React-Native-Travelling-App/raw/main/assets/images/hue.jpg'),
+    ('Vũng Tàu', 4500000, 'https://github.com/lonhh0712/Project-React-Native-Travelling-App/raw/main/assets/images/vungtau.jpg'),
+    ('Phú Yên', 3200000, 'https://github.com/lonhh0712/Project-React-Native-Travelling-App/raw/main/assets/images/phuyen.jpg')
   `);
 }
